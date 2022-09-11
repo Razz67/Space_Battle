@@ -1,73 +1,69 @@
-
 // setTimeout(function () {
-// 	alert(
-// 		"Welcome to Brian's Space Battle page ! - open the console log on the page to play . Hurry the fate of the planet is at your fingertips Captian! If you chose to retreat at any time just leave the page. But know that choice has doomed Earth! "
-// 	);
+// 	alert("Welcome to Space Battle");
 // }, 5000);
 
 
-const battleWinCheck = (aliens) => {
-	if (aliens.hull <= 0) {
-		console.log("You blew up " + aliens.name + " Nice job!");
-		alert(`You blew up ${aliens.name} Nice job!`);
-		alienDestroyed();
-	} else {
-		console.log("keep shooting nice attack keep playing");
-		alert("keep shooting nice attack keep playing");
-		checkIfWon()
+
+
+function startMessage() {
+	alert(`This is the starship enterprise on a five year mission to explore the galaxy.\nOn our journey to planet Z-Delta2, we have encountered six hostile alien ships.\nThey appear to be Ding Dongs from planet Dinga Ling.\nFrom our experience with the Dingdonglingians, we know they are very hostile and will not hesitate to destroy anything in there path.\n  However, We will take the first strike!`);
+	alert(`Battle stations! ${player.name} is firing on ${aliens[0].name}`);
+}
+
+function attackMessage() {
+	alert(
+		"Red Alert!, Red alert!... Prepare for impact, The Dinglingians are attacking!"
+	);
+}
+
+
+// Confirm if the player wants to continue the attack
+function confirmation() {
+	const input = confirm("Do you want to continue the attack?");
+	if (input) {
+		// player.attack(aliens.find((alien) => alien.hull > 0));
+		alert(`${player.name} attacked ${aliens[0].name}`);
+	} 
+	if (input === false) {
+		alert(`${player.name} is retreating...Game Over!...Refresh the page to play again`);
+		stopPropagation(); 
 	}
-};
+}
 
 // check if game is over
 //  if not, start with another alien
 
-const checkIfWon = () => {
-	if (aliens[0] === "destroyed") {
-		console.log(`${player.name} Won!`);
-		alert(`Awesome ${player.name} won the battle!, Refresh the page to play again`);
+function checkIfWon() {
+	if (aliens.length === 0) {
+		alert(
+			`Awesome ${player.name} won the battle!, Refresh the page or press OK to play again`
+		);
+		stopPropagation();
 	} else {
-		console.log("Keep playing");
-		if (aliens[3] === "destroyed") {
-			aliens[0].attack(player);
-		} else {
-			aliens[0].fight(player); 
-		}
+		alert(`Keep fighting!... There are ${aliens.length} aliens left`);
 	}
-};
+}
 
-
-// when the last ship in the array is destroyed--Game Over!
-
-const alienDestroyed = () => {
+function alienDestroyed() {
 	if (aliens[0].hull <= 0) {
-		console.log(`${player.name} destroyed an alien ship!`);
-		aliens[aliens.length] = "destroyed";
+		alert(`${player.name} destroyed ${aliens[0].name}`);
 		aliens.splice(0, 1);
-		checkIfWon();
 	} else {
-		console.log("Nice Shot Keep Playing");
-		checkIfWon();
+		alert("Nice Shot he's going down!");
 	}
-};
+}
 
-//// If player is defeated then game over
+//// If player is defeated then game is over
 
-const playerDefeated = (player) => {
+function playerDefeated(player) {
 	if (player.hull <= 0) {
-		console.log(`Game over ${player.name} is destroyed.... Refresh the page to play again`);
-		alert(`Snaps!!! your ship blew up! ${player.name} is destroyed! Refresh the page to play again`);
+		alert(
+			`Snaps!!! your ship blew up! ${player.name} is destroyed! Refresh the page to play again`
+		);
 	} else {
-		alert("Your turn now captian enter your move below .. ");
-		let  conformation = confirm("Do you want to continue the attack?");
-		if (conformation) {
-			aliens[0].fight(player);
-		} else {
-			console.log("Game Over");
-			alert("Game Over");
-		}
+		alert(`${player.name} is still alive!...Hull is at ${player.hull}`);
 	}
-};
-
+}
 
 // ship constructor
 
@@ -78,100 +74,89 @@ class Ship {
 		this.firepower = firepower;
 		this.accuracy = accuracy;
 	}
-	
-	attack(aliens) {
-		if (this.hull >= 1) {
-			if (aliens.name === aliens.name) {
-				if (Math.floor(Math.random() * Math.floor(9)) / 10 <= this.accuracy) {
-						console.log(`${aliens.name} got hit, their health is down to`);
-						console.log((aliens.hull += -10));
-						alienDestroyed(aliens); // check if you destroyed the ship
-					} else {
-					console.log("You missed");
-				}
-			} else {
-				let conformation = confirm("Do you want to continue this merciless attack?");
-				if (conformation === true) {
-					player.attack(aliens);
-				}
-			}
-		} else {
-			console.log(`${player.name} is destroyed... Refresh the page to play again`); 
-		}
+
+// Check the players hull damage
+	playerHealth() {
+		console.log(`The ${this.name} shields are now ${this.hull}`);
+		alert(`The ${this.name} shields are now ${this.hull}`);
 	}
 
+
+	attack(aliens) {
+		if (aliens) {
+		if (this.hull > 0) {
+			if (Math.random() < this.accuracy) {
+				aliens.hull -= this.firepower;
+				alert(`${aliens.name} got hit, their health is down to ${aliens.hull}`);
+			} else {
+				alert(`${player.name} Missed`);
+			}
+		}
+	}
 }
+
+}
+
+
 
 
 // instantiate the player
 let player = new Ship("USS Enterprise", 20, 5, 0.7);
 
-
-// Create the aliens
+// Create the aliens Class
 class Alien {
-	constructor(name, hull, firepower, accuracy) {
+	constructor(name) {
 		this.name = name;
 		this.hull = Math.floor(Math.random() * 4) + 3; //// make random between 3 & 6
 		this.firepower = Math.floor(Math.random() * 3) + 2; // random between 2 & 4
-		this.accuracy = (Math.floor(Math.random() * (.8 - .6) + .6).toFixed(1)); // random between .6 and .8 
+		this.accuracy = Math.floor(Math.random() * Math.floor(9)) / 10; // random between 0.6 & 0.8
 	}
-	announceHealth() {
+
+	// Check the aliens hull damage
+	alienHealth() {
 		alert(`The ${this.name} shields are now ${this.hull}`);
 	}
 
-	fight(player) {
-		if (this.name === aliens[0].name) {
-			if (Math.floor(Math.random() * Math.floor(9)) / 10 <= this.accuracy) {
-			
-				console.log((player.hull -= this.firepower));
-				playerDefeated(player); 
+	aliensAttackPlayer(player) {
+		if (player) {
+			if (Math.random() < this.accuracy) {
+				player.hull -= this.firepower;
+				alert(`${this.name} Hit your ship! ${player.name} took ${this.firepower} damage`
+				);
 			} else {
-				alert(`${this.name} missed`);
-				console.log(`Alien missed ${player.name} "took no damage. Hull power at ${player.hull}`);
-				playerDefeated(player);
+				alert(
+					`${aliens[0].name} missed ${player.name} took no damage. Hull power at ${player.hull}`);
 			}
-		} else {
-			playerDefeated(player);
-		}
-	}
-
-	attack(player) {
-		if (this.name === aliens[0].name) {
-			if (Math.floor(Math.random() * Math.floor(9)) / 10 <= this.accuracy) {
-				console.log(`${this.name} Hit your ship!`);
-				console.log(`${player.name} took ${this.firepower} damage`);
-					
-				alert(`${player.hull} += -7`); 
-				playerDefeated(player); 
-			} else {
-				console.log(`${this.name} missed`);
-				alert(`${player.name} took no damage. Hull power at ${player.hull}`);
-				playerDefeated(player);
-			}
-		} else {
-			playerDefeated(player);
 		}
 	}
 }
 
 
+// instantiate the aliens
+
 let aliens = [];
 
-aliens.unshift((alien6 = new Alien("ALIEN #6")));
-aliens.unshift((alien5 = new Alien("ALIEN #5")));
-aliens.unshift((alien4 = new Alien("ALIEN #4")));
-aliens.unshift((alien3 = new Alien("ALIEN #3")));
-aliens.unshift((alien2 = new Alien("ALIEN #2")));
-aliens.unshift((alien1 = new Alien("ALIEN #1")));
+aliens.unshift((al6 = new Alien("ALIEN #6")));
+aliens.unshift((al5 = new Alien("ALIEN #5")));
+aliens.unshift((al4 = new Alien("ALIEN #4")));
+aliens.unshift((al3 = new Alien("ALIEN #3")));
+aliens.unshift((al2 = new Alien("ALIEN #2")));
+aliens.unshift((al1 = new Alien("ALIEN #1")));
 
 
 
+// Start the game
+startMessage();
 
-const startMessage = alert(`GAME STARTED:    ${player.name} fired on ${aliens[0].name}`);
-player.attack(aliens[0]);
-battleWinCheck();
+while (aliens.length > 0) {
+	confirmation();
+	player.attack(aliens[0]);
+	alienDestroyed();
+	checkIfWon();
+	attackMessage();
+	aliens[0].aliensAttackPlayer(player);
+	playerDefeated(player);
+}
 
-console.log("Red Alert!, Red alert!... Prepare for battle, The aliens are attacking!");
-alert("Red Alert!, Red alert!... Prepare for battle, The aliens are attacking!");
-playerDefeated(player);
-// console.log(`${aliens.name} fired on ${player.name}`); 
+
+

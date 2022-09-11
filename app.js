@@ -1,16 +1,16 @@
-// soldier class
-class Soldier {
+// ship class
+class Ship {
   constructor(name, hull, firepower, accuracy) {
-    this.name = name
-    this.hull = hull
-    this.firepower = firepower
-    this.accuracy = accuracy
+    this.name = name;
+    this.hull = hull;
+    this.firepower = firepower;
+    this.accuracy = accuracy;
   }
   attack(alien) {
     if (alien) {
       alien.hull -= this.firepower
     }
-    console.log(`Soldier attacked ${alien.name}`)
+    // console.log(`${user.name} attacked ${alien.name}`)
     if (alien.hull <= 0) {
       aliens.shift()
       if (this.hull > 0) {
@@ -22,31 +22,38 @@ class Soldier {
   }
 }
 // alien class
-class Alien extends Soldier {
+class Alien extends Ship {
   constructor(name) {
     super(name)
     this.name = name
-    this.hull = Math.floor(Math.random() * 4) + 3
-    this.firepower = Math.floor(Math.random() * 3) + 2
-    this.accuracy = (Math.floor(Math.random() * 3) + 6) / 10
+    this.hull = Math.floor(Math.random() * 4) + 3;
+    this.firepower = Math.floor(Math.random() * 3) + 2;
+    this.accuracy =  (Math.floor(Math.random() * (.8 - .6) + .6).toFixed(1));
   }
   attack(user) {
     user.hull -= this.firepower
-    console.log(`${this.name} attacked Soldier`)
+    alert(`${this.name} attacked ${user.name}`);
     if (user.hull <= 0) {
-      alert("Game Over: Soldier Lost")
+      alert("Game Over: Soldier Lost");
     } else {
-      const input = prompt("attack || retreat")
+      const input = confirm("Do you want to continue the attack?");
       if (input === "attack") {
-        user.attack(aliens.find(alien => alien.hull > 0))
+        user.attack(aliens.find(alien => alien.hull > 0));
       } else {
-        alert("Game Over")
+        alert("Game Over");
       }
     }
   }
 }
 // user instance
-const user = new Soldier("User", 20, 5)
+const user = new Ship("USS Enterprise", 20, 5, 0.7);
+
+    console.log(`Ship accuracy is: ${user.accuracy}`);
+		console.log(`Ship firepower is: ${user.firepower}`);
+		console.log(`Ship hull is: ${user.hull}`);
+
+
+
 // aliens
 const aliens = [
   new Alien("Alien 1"),
@@ -56,5 +63,10 @@ const aliens = [
   new Alien("Alien 5"),
   new Alien("Alien 6")
 ]
-const startMessage = alert("GAME STARTED: Soldier fired on Alien")
+
+    console.log(`alien accuracy is: ${aliens.accuracy}`);
+		console.log(`alien firepower is: ${aliens.firepower}`);
+		console.log(`alien hull is: ${aliens.hull}`);
+
+const startMessage = alert(`GAME STARTED: ${user.name} fired on ${aliens[0].name}`);
 user.attack(aliens.find(alien => alien.hull > 0));
