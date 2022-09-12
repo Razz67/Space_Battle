@@ -1,25 +1,6 @@
 // ********** Can't get DOM elements to update.  Will implement later.**********
 // Render player stats to the DOM
-// let diplayStats = (playerName, playerStats, enemyName, enemyStats) => {
-// 	playerName = document.getElementById("playerNameBox");
-// 	playerName.innerHTML = `${player.name}`;
 
-// 	playerStats = document.querySelector(".playerStats");
-// 	playerStats.innerHTML = `
-// 	Health: ${player.hull}
-// 	Firepower: ${player.firepower}
-// 	Accuracy: ${player.accuracy}`;
-
-// 	// Render alien stats to the DOM
-// 	enemyName = document.getElementById("enemyNameBox");
-// 	enemyName.innerHTML = `${aliens[0].name}`;
-
-// 	enemyStats = document.querySelector(".enemyStats");
-// 	enemyStats.innerHTML = `
-// 	Health: ${aliens[0].hull}
-// 	Firepower: ${aliens[0].firepower}
-// 	Accuracy: ${aliens[0].accuracy}`;
-// };
 
 window.onload = () => {
 	function startMessage() {
@@ -161,11 +142,35 @@ window.onload = () => {
 	aliens.unshift((al2 = new Alien("ALIEN #2")));
 	aliens.unshift((al1 = new Alien("ALIEN #1")));
 
+
+
+	let diplayStats = (playerName, playerStats, enemyName, enemyStats) => {
+		playerName = document.getElementById("playerNameBox");
+		playerName.innerHTML = `${player.name}`;
+
+		playerStats = document.querySelector(".playerStats");
+		playerStats.innerHTML = `
+	Health: ${player.hull}
+	Firepower: ${player.firepower}
+	Accuracy: ${player.accuracy}`;
+
+		// Render alien stats to the DOM
+		enemyName = document.getElementById("enemyNameBox");
+		enemyName.innerHTML = `${aliens[0].name}`;
+
+		enemyStats = document.querySelector(".enemyStats");
+		enemyStats.innerHTML = `
+	Health: ${aliens[0].hull}
+	Firepower: ${aliens[0].firepower}
+	Accuracy: ${aliens[0].accuracy}`;
+	};
+
 	// Start the game
 
 	startMessage();
 
 	while (aliens.length > 0) {
+		diplayStats();
 		confirmation();
 		player.attack(aliens[0]);
 		alienDestroyed();
